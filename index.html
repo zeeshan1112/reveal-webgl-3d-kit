@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CardSpends — 3D WebGL &amp; Reveal.js Strategy Deck</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
+  />
+  <link rel="stylesheet" href="./src/styles/deck.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- Layer 0: Interactive WebGL Bayer Dithering Shader -->
+  <canvas id="webgl-bg"></canvas>
+
+  <!-- Layer 1: Three.js 3D Textured Cards + Orbiting Gems (+ optional .glb) -->
+  <canvas id="webgl-3d"></canvas>
+
+  <!-- Persistent Top Chrome -->
+  <div class="deck-chrome">
+    <div class="brand-pill">
+      <span class="brand-dot"></span>
+      <span class="brand-name">CARDSPENDS · STRATEGY DECK</span>
+    </div>
+    <div class="slide-counter" id="slide-counter">01 / 08</div>
+  </div>
+
+  <!-- Layer 2: Reveal.js Slides -->
+  <div class="reveal">
+    <div class="slides">
+      <!-- SLIDE 1 -->
+      <section>
+        <div class="grid-2">
+          <div>
+            <div class="eyebrow gsap-item">Product &amp; Growth Architecture</div>
+            <h1 class="hero-title gsap-item">
+              Every swipe,<br />
+              <span class="gold-text">worth more.</span>
+            </h1>
+            <p class="lead-copy gsap-item">
+              Designing the CardSpends authentication &amp; conversion funnel:
+              balancing open SEO discovery, viral card comparison, and
+              high-intent bank redirects.
+            </p>
+            <div class="hint-bar gsap-item">
+              <span><span class="kbd">→</span> or <span class="kbd">Space</span> to advance</span>
+              <span>·</span>
+              <span>Move cursor to interact with 3D cards &amp; Bayer shader</span>
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2 -->
+      <section>
+        <div class="eyebrow gsap-item">01 · The Conversion Dilemma</div>
+        <h2 class="slide-title gsap-item">
+          What Should Be <span class="gold-text">Gated</span> vs. Open?
+        </h2>
+        <p class="lead-copy gsap-item">
+          Three high-value touchpoints define the CardSpends journey. Putting a
+          login wall on the wrong one kills top-of-funnel growth.
+        </p>
+
+        <div class="grid-3">
+          <div class="glass-card gsap-item">
+            <span class="tag-badge tag-open">Touchpoint 1</span>
+            <h3>Explore &amp; Filter</h3>
+            <p>
+              39+ Indian credit cards across 17 banks, 6 core categories, and
+              everyday spend drill-downs.
+            </p>
+          </div>
+          <div class="glass-card gsap-item">
+            <span class="tag-badge tag-soft">Touchpoint 2</span>
+            <h3>Side-by-Side Compare</h3>
+            <p>
+              Real-time comparison matrix for fees, SmartBuy/transfer ratios,
+              lounges, and forex markups.
+            </p>
+          </div>
+          <div class="glass-card gsap-item">
+            <span class="tag-badge tag-auth">Touchpoint 3</span>
+            <h3>Apply Online</h3>
+            <p>
+              Peak-intent moment when a user chooses a card and clicks through
+              to the issuing bank.
+            </p>
+          </div>
+        </div>
+
+        <div class="quote-banner gsap-item">
+          If users are forced to sign up just to read public card terms,
+          <strong>bounce rates exceed 75–85%</strong> and search engines cannot
+          index our directory.
+        </div>
+      </section>
+
+      <!-- SLIDE 3 -->
+      <section>
+        <div class="grid-2">
+          <div>
+            <div class="eyebrow gsap-item">02 · Core Philosophy</div>
+            <h2 class="slide-title gsap-item">
+              Earn the Sign-In.<br />
+              <span class="gold-text">Never Extort It.</span>
+            </h2>
+            <p class="lead-copy gsap-item">
+              Public facts belong to everyone. Personalized state, savings
+              alerts, and cap tracking belong to logged-in members.
+            </p>
+
+            <div class="grid-2-equal" style="margin-top: 22px">
+              <div class="glass-card gsap-item">
+                <span class="tag-badge tag-danger">Old Playbook</span>
+                <h3>Hard Login Wall</h3>
+                <ul>
+                  <li>Blocks Google crawlers &amp; SEO</li>
+                  <li>Kills Reddit / WhatsApp shares</li>
+                  <li>High friction before trust exists</li>
+                </ul>
+              </div>
+              <div class="glass-card gold-border gsap-item">
+                <span class="tag-badge tag-open">CardSpends Model</span>
+                <h3>Value-First Funnel</h3>
+                <ul>
+                  <li>Instant utility on first visit</li>
+                  <li>Natural sign-in triggers</li>
+                  <li>Higher LTV &amp; retention</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4 -->
+      <section>
+        <div class="eyebrow gsap-item">03 · Top of Funnel</div>
+        <h2 class="slide-title gsap-item">
+          Explore &amp; Browse: <span class="gold-text">100% Open</span>
+        </h2>
+        <p class="lead-copy gsap-item">
+          Every category page, bank directory, and card detail route stays
+          completely ungated to power organic search and community sharing.
+        </p>
+
+        <div class="stat-row">
+          <div class="stat-box gsap-item">
+            <div class="stat-num" data-count="17">17</div>
+            <div class="stat-label">Indian Banks Indexed</div>
+          </div>
+          <div class="stat-box gsap-item">
+            <div class="stat-num" data-count="39">39</div>
+            <div class="stat-label">Curated Credit Cards</div>
+          </div>
+          <div class="stat-box gsap-item">
+            <div class="stat-num" data-count="16">16</div>
+            <div class="stat-label">Categories &amp; Filters</div>
+          </div>
+          <div class="stat-box gsap-item">
+            <div class="stat-num">0</div>
+            <div class="stat-label">Login Walls to Browse</div>
+          </div>
+        </div>
+
+        <div class="quote-banner gsap-item">
+          <strong>Why it wins:</strong> Users discovering
+          <em>/banks/hdfc</em> or <em>/categories/best-credit-cards</em> via
+          Google immediately experience our speed, design, and accuracy.
+        </div>
+      </section>
+
+      <!-- SLIDE 5 -->
+      <section>
+        <div class="eyebrow gsap-item">04 · The "Aha!" Moment</div>
+        <h2 class="slide-title gsap-item">
+          Comparison: <span class="gold-text">Open Matrix, Gate Persistence</span>
+        </h2>
+        <p class="lead-copy gsap-item">
+          Let visitors compare cards immediately—then offer 1-click sign-in when
+          they want to save or personalize the math.
+        </p>
+
+        <div class="grid-2-equal">
+          <div class="glass-card gsap-item">
+            <span class="tag-badge tag-open">Free &amp; Ungated</span>
+            <h3>Instant Side-by-Side Matrix</h3>
+            <ul>
+              <li>Compare up to 4 cards simultaneously</li>
+              <li>Joining &amp; annual fee waiver thresholds</li>
+              <li>Base return, lounge access &amp; forex markup</li>
+              <li>Proves CardSpends superiority in 10 seconds</li>
+            </ul>
+          </div>
+          <div class="glass-card gold-border gsap-item">
+            <span class="tag-badge tag-auth">Sign-In Trigger</span>
+            <h3>Save &amp; Personalize ROI</h3>
+            <ul>
+              <li>Save &amp; share custom comparison links</li>
+              <li>Overlay user's actual ₹ monthly spend split</li>
+              <li>Recommend optimal 2-card / 3-card combo</li>
+              <li>1-click Google Sign-In keeps flow effortless</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6 -->
+      <section>
+        <div class="grid-2">
+          <div>
+            <div class="eyebrow gsap-item">05 · Peak Intent Capture</div>
+            <h2 class="slide-title gsap-item">
+              Apply Online: <span class="gold-text">Soft-Gate Interstitial</span>
+            </h2>
+            <p class="lead-copy gsap-item">
+              Never put a hard registration wall in front of an affiliate/bank
+              redirect—that drops 40–60% of applications. Use a 3-second smart
+              interstitial instead.
+            </p>
+            <div class="glass-card gsap-item" style="margin-top: 22px">
+              <span class="tag-badge tag-soft">Smart Attribution</span>
+              <h3>Best of Both Worlds</h3>
+              <ul>
+                <li>Captures email/identity for high-intent users</li>
+                <li>Preserves 100% of bank redirects via instant skip</li>
+                <li>Enables post-approval cap &amp; renewal tracking</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="modal-mock gsap-item">
+            <span class="tag-badge tag-soft">Live UX Preview</span>
+            <h3 style="margin: 0 0 8px 0; font-size: 0.95em; color: #fff">
+              Redirecting to HDFC Official Portal...
+            </h3>
+            <p style="margin: 0; font-size: 0.65em; color: #d4d4d8; line-height: 1.5">
+              Save this application to get milestone bonus reminders, SmartBuy
+              5X cap alerts, and annual fee waiver countdowns.
+            </p>
+            <button class="btn-gold" type="button">
+              Continue with Google &amp; Track Card
+            </button>
+            <button class="btn-ghost" type="button">
+              Skip &amp; Proceed Directly to Bank →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7 -->
+      <section>
+        <div class="eyebrow gsap-item">06 · True Retention Engine</div>
+        <h2 class="slide-title gsap-item">
+          Where Sign-In <span class="gold-text">Actually Wins</span>
+        </h2>
+        <p class="lead-copy gsap-item">
+          Users happily create an account when the product stores their private
+          spend data and saves them money every single month.
+        </p>
+
+        <div class="grid-4">
+          <div class="glass-card gold-border gsap-item">
+            <span class="tag-badge tag-auth">Tracker</span>
+            <h3>5X / 10X Cap Meter</h3>
+            <p>
+              Track monthly SmartBuy voucher &amp; accelerated portal limits
+              before overspending.
+            </p>
+          </div>
+          <div class="glass-card gsap-item">
+            <span class="tag-badge tag-auth">Portfolio</span>
+            <h3>My Card Wallet</h3>
+            <p>
+              Manage all owned cards, renewal dates, and fee-waiver progress in
+              one dashboard.
+            </p>
+          </div>
+          <div class="glass-card gsap-item">
+            <span class="tag-badge tag-auth">Alerts</span>
+            <h3>Devaluation Radar</h3>
+            <p>
+              Instant notifications when banks change reward caps or transfer
+              partner ratios.
+            </p>
+          </div>
+          <div class="glass-card gsap-item">
+            <span class="tag-badge tag-auth">Optimizer</span>
+            <h3>Next-Swipe Guide</h3>
+            <p>
+              Personal cheat sheet telling you which card in your wallet to
+              swipe at checkout.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8 -->
+      <section>
+        <div class="eyebrow gsap-item">07 · Growth Flywheel</div>
+        <h2 class="slide-title gsap-item">
+          The Complete <span class="gold-text">CardSpends</span> Funnel
+        </h2>
+        <p class="lead-copy gsap-item">
+          Open at the top, frictionless in the middle, deeply sticky once they
+          have a card in hand.
+        </p>
+
+        <div class="grid-4">
+          <div class="glass-card gsap-item">
+            <div class="step-num">STEP 01 · OPEN</div>
+            <h3>SEO &amp; Browse</h3>
+            <p>Ungated categories, bank hubs &amp; card specs drive organic traffic.</p>
+          </div>
+          <div class="glass-card gsap-item">
+            <div class="step-num">STEP 02 · OPEN</div>
+            <h3>Compare Cards</h3>
+            <p>Interactive 4-card matrix builds trust &amp; viral shares.</p>
+          </div>
+          <div class="glass-card gold-border gsap-item">
+            <div class="step-num">STEP 03 · SOFT GATE</div>
+            <h3>Apply Online</h3>
+            <p>Optional 1-click Google track + instant bank redirect.</p>
+          </div>
+          <div class="glass-card gold-border gsap-item">
+            <div class="step-num">STEP 04 · AUTH</div>
+            <h3>Track &amp; Retain</h3>
+            <p>Bonus caps, fee waivers &amp; wallet optimization lock in LTV.</p>
+          </div>
+        </div>
+
+        <div class="quote-banner gsap-item">
+          Consolidated Stack: <strong>Reveal.js</strong> + <strong>GSAP</strong> +
+          <strong>Three.js 3D</strong> + <strong>WebGL Bayer Dithering</strong>.
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Reveal.js & GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+
+  <!-- Consolidated Modular App Entry -->
+  <script type="module">
+    import { initBayerDitherBackground } from "./src/shaders/bayer-dither.js";
+    import { initThreeStage } from "./src/three/stage.js";
+    import { initRevealGsapSync } from "./src/motion/gsap-sync.js";
+
+    const shaderState = initBayerDitherBackground("webgl-bg", {
+      deepColor: [0.015, 0.06, 0.06],
+      midColor: [0.038, 0.135, 0.135],
+      accentColor: [0.83, 0.68, 0.22],
+    });
+
+    const threeStage = initThreeStage({
+      canvasId: "webgl-3d",
+      cards: [
+        { id: "infinia", image: "./assets/cards/hdfc-infinia-scene7.png", edgeColor: 0x1e293b },
+        { id: "atlas", image: "./assets/cards/axis-atlas.webp", edgeColor: 0x3b1d2e },
+        { id: "emeralde", image: "./assets/cards/icici-emeralde-metal.webp", edgeColor: 0x113328 },
+      ],
+      slidePoses: [
+        {
+          infinia:  { x: 1.85, y: 0.15, z: 0.25, rx: 0.1,  ry: -0.35, rz: 0.04,  s: 0.88 },
+          atlas:    { x: 2.35, y: -0.25, z: -0.45, rx: 0.12, ry: -0.42, rz: -0.14, s: 0.82 },
+          emeralde: { x: 1.35, y: 0.52, z: -0.95, rx: 0.08, ry: -0.28, rz: 0.16,  s: 0.78 },
+        },
+        {
+          infinia:  { x: 3.4, y: 1.75, z: -2.4, rx: 0.22, ry: -0.45, rz: 0.08, s: 0.52 },
+          atlas:    { x: 3.7, y: 1.55, z: -2.9, rx: 0.24, ry: -0.48, rz: -0.1, s: 0.48 },
+          emeralde: { x: 3.1, y: 1.95, z: -3.3, rx: 0.2,  ry: -0.4,  rz: 0.18, s: 0.45 },
+        },
+        {
+          infinia:  { x: 2.05, y: 0.28, z: 0.3,  rx: -0.08, ry: -0.45, rz: -0.05, s: 0.86 },
+          atlas:    { x: 2.45, y: -0.52, z: -0.4, rx: -0.06, ry: -0.5,  rz: -0.18, s: 0.78 },
+          emeralde: { x: 4.5,  y: 2.4,  z: -3.5, rx: 0.2,   ry: -0.3,  rz: 0.12,  s: 0.42 },
+        },
+        {
+          infinia:  { x: 3.55, y: 1.65, z: -2.3, rx: 0.28, ry: 0.38,  rz: -0.08, s: 0.52 },
+          atlas:    { x: -3.5, y: -1.7, z: -2.8, rx: -0.2, ry: 0.45,  rz: 0.12,  s: 0.48 },
+          emeralde: { x: 3.1,  y: -1.8, z: -3.0, rx: 0.15, ry: -0.4,  rz: -0.1,  s: 0.46 },
+        },
+        {
+          infinia:  { x: -1.45, y: -1.95, z: -2.0, rx: 0.35, ry: 0.22,  rz: 0.04,  s: 0.55 },
+          atlas:    { x: 1.45,  y: -1.95, z: -2.0, rx: 0.35, ry: -0.22, rz: -0.04, s: 0.55 },
+          emeralde: { x: 0.0,   y: 2.4,   z: -4.2, rx: 0.2,  ry: 0.0,   rz: 0.0,   s: 0.35 },
+        },
+        {
+          infinia:  { x: -3.25, y: 1.75, z: -2.1, rx: 0.18, ry: 0.42,  rz: 0.06, s: 0.56 },
+          atlas:    { x: 3.8,   y: -2.0, z: -3.4, rx: -0.2, ry: -0.4,  rz: -0.1, s: 0.42 },
+          emeralde: { x: -3.7,  y: -2.1, z: -3.6, rx: 0.15, ry: 0.3,   rz: -0.1, s: 0.4 },
+        },
+        {
+          infinia:  { x: 3.3, y: 1.7, z: -2.2, rx: -0.15, ry: -0.4, rz: 0.05,  s: 0.52 },
+          atlas:    { x: 3.55, y: 1.55, z: -2.6, rx: -0.15, ry: -0.4, rz: -0.08, s: 0.5 },
+          emeralde: { x: 3.8, y: 1.4, z: -3.0, rx: -0.15, ry: -0.4, rz: -0.2,  s: 0.48 },
+        },
+        {
+          infinia:  { x: 2.85, y: -1.25, z: -1.4, rx: -0.14, ry: -0.42, rz: 0.06, s: 0.64 },
+          atlas:    { x: 3.3,  y: -1.45, z: -1.9, rx: -0.14, ry: -0.45, rz: -0.1, s: 0.58 },
+          emeralde: { x: 2.4,  y: -1.05, z: -2.4, rx: -0.14, ry: -0.38, rz: 0.18, s: 0.54 },
+        },
+      ],
+    });
+
+    initRevealGsapSync({ shaderState, threeStage });
+  </script>
+</body>
+</html>
