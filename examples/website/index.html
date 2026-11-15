@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scroll-Driven Website Template — Bayer WebGL + 3D + GSAP</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../../src/styles/deck.css" />
+  <link rel="stylesheet" href="../../src/styles/cinematic.css" />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.min.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <style>
+    html, body { overflow-x: hidden; overflow-y: auto; height: auto; }
+    main { position: relative; z-index: 10; }
+    section.web-band {
+      min-height: 100vh;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="webgl-bg"></canvas>
+  <canvas id="webgl-3d"></canvas>
+
+  <!-- Optional Intro Overlay (plays once on landing; Skip button included) -->
+  <div id="cinematic-intro">
+    <div class="in-curtain"></div>
+    <div class="in-bar top"></div>
+    <div class="in-bar bot"></div>
+    <div class="in-flash"></div>
+    <div class="in-stage">
+      <div class="in-cap">WELCOME TO THE EXPERIENCE</div>
+      <div class="in-beat">Websites that feel like <em>cinema</em>.</div>
+      <div class="in-ttl"><span class="w">CARDSPENDS</span></div>
+      <div class="in-rule"></div>
+      <div class="in-sub">SCROLL TO EXPLORE</div>
+    </div>
+    <button class="in-skip" id="in-skip" type="button">Skip Intro →</button>
+  </div>
+
+  <main>
+    <section class="web-band" data-pose="0" data-warm="0.25">
+      <div style="max-width: 620px;">
+        <div class="eyebrow">SCROLL-DRIVEN WEBSITE TEMPLATE</div>
+        <h1 class="hero-title">Every swipe,<br /><span class="gold-text">worth more.</span></h1>
+        <p class="lead-copy">
+          Scroll down to watch the Bayer-dithered WebGL backdrop pan and the
+          Three.js 3D cards choreograph automatically via GSAP ScrollTrigger.
+        </p>
+      </div>
+    </section>
+
+    <section class="web-band" data-pose="1" data-warm="0.6">
+      <div class="eyebrow">01 · OPEN DISCOVERY</div>
+      <h2 class="slide-title">Built for <span class="gold-text">Speed &amp; Craft</span></h2>
+      <div class="grid-3">
+        <div class="glass-card">
+          <span class="tag-badge tag-open">WebGL</span>
+          <h3>8x8 Bayer Shader</h3>
+          <p>60fps procedural noise &amp; dithering with zero heavy MP4 downloads.</p>
+        </div>
+        <div class="glass-card gold-border">
+          <span class="tag-badge tag-soft">Three.js</span>
+          <h3>3D Card &amp; GLTF Stage</h3>
+          <p>Real card textures or .glb models animated seamlessly on scroll.</p>
+        </div>
+        <div class="glass-card">
+          <span class="tag-badge tag-auth">GSAP</span>
+          <h3>ScrollTrigger Sync</h3>
+          <p>Tie any DOM element, shader uniform, or 3D camera to scroll progress.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script type="module">
+    import { initBayerDitherBackground } from "../../src/shaders/bayer-dither.js";
+    import { initThreeStage } from "../../src/three/stage.js";
+    import { buildCinematicIntroTimeline } from "../../src/motion/cinematic-intro.js";
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const shaderState = initBayerDitherBackground("webgl-bg");
+    const threeStage = initThreeStage({
+      canvasId: "webgl-3d",
+      cards: [
+        { id: "infinia", image: "../../assets/cards/hdfc-infinia-scene7.png", edgeColor: 0x1e293b },
+        { id: "atlas", image: "../../assets/cards/axis-atlas.webp", edgeColor: 0x3b1d2e },
+        { id: "emeralde", image: "../../assets/cards/icici-emeralde-metal.webp", edgeColor: 0x113328 },
+      ],
+      slidePoses: [
+        {
+          infinia:  { x: 1.85, y: 0.15, z: 0.25, rx: 0.1,  ry: -0.35, rz: 0.04,  s: 0.88 },
+          atlas:    { x: 2.35, y: -0.25, z: -0.45, rx: 0.12, ry: -0.42, rz: -0.14, s: 0.82 },
+          emeralde: { x: 1.35, y: 0.52, z: -0.95, rx: 0.08, ry: -0.28, rz: 0.16,  s: 0.78 },
+        },
+        {
+          infinia:  { x: 3.3, y: 1.7, z: -2.2, rx: -0.15, ry: -0.4, rz: 0.05, s: 0.52 },
+          atlas:    { x: 3.6, y: 1.5, z: -2.6, rx: -0.15, ry: -0.4, rz: -0.08, s: 0.5 },
+          emeralde: { x: 3.8, y: 1.3, z: -3.0, rx: -0.15, ry: -0.4, rz: -0.2, s: 0.48 },
+        },
+      ],
+    });
+
+    // Play cinematic intro once on load (or skip)
+    const introTl = buildCinematicIntroTimeline({ shaderState });
+    document.getElementById("in-skip")?.addEventListener("click", () => {
+      if (introTl && introTl.progress() < 1) introTl.progress(1);
+    });
+
+    // Scroll-driven shader & 3D transitions
+    document.querySelectorAll("section.web-band").forEach((sec, idx) => {
+      ScrollTrigger.create({
+        trigger: sec,
+        start: "top center",
+        end: "bottom center",
+        onEnter: () => {
+          threeStage?.setSlide(idx, false);
+          if (shaderState) {
+            gsap.to(shaderState, {
+              pan: idx * 1.4,
+              warm: parseFloat(sec.dataset.warm || "0.25"),
+              duration: 1.6,
+              ease: "power2.out",
+            });
+          }
+        },
+        onEnterBack: () => {
+          threeStage?.setSlide(idx, false);
+          if (shaderState) {
+            gsap.to(shaderState, {
+              pan: idx * 1.4,
+              warm: parseFloat(sec.dataset.warm || "0.25"),
+              duration: 1.6,
+              ease: "power2.out",
+            });
+          }
+        },
+      });
+    });
+  </script>
+</body>
+</html>

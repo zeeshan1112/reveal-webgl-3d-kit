@@ -1,25 +1,21 @@
-# Reveal + WebGL Bayer Dither + Three.js 3D + GSAP Presentation Kit
+# Creative Web + HyperFrames Video + 3D Deck Stack
 
-A zero-build, single-repo starter kit consolidating the interactive HTML presentation stack into modular ES files ready for local viewing or one-click GitHub Pages publishing.
+A **unified, AI-agent-ready creative stack** combining **WebGL $8\times8$ Bayer Dithering**, **Three.js 3D**, **GSAP**, and **Reveal.js** — designed so you can point any AI coding agent at this repo (see [`AGENTS.md`](AGENTS.md)) and build:
 
-## Consolidated Stack
-- **Slides & Export**: [Reveal.js 5](https://revealjs.com/) (keyboard navigation, overview mode `Esc`, PDF export via `?print-pdf`).
-- **Motion Choreography**: [GSAP 3](https://gsap.com/) synced to `slidechanged` events for staggered text reveals, numeric count-ups, and 3D pose tweening.
-- **Interactive GPU Background**: Custom GLSL $8\times8$ **Bayer Dithering** + FBM noise shader with cursor spotlight and click ripples (`src/shaders/bayer-dither.js`).
-- **3D Stage**: **Three.js** (`src/three/stage.js`) with beveled metallic 3D cards mapped to real card artwork (`assets/cards/`) plus `GLTFLoader` support for `.glb`/`.gltf` assets (`assets/models/`).
+1. **Websites** ([`examples/website/index.html`](examples/website/index.html)) — Scroll-driven landing pages (`GSAP ScrollTrigger` + live Bayer shader `pan`/`warm` + 3D stage).
+2. **HyperFrames Videos** ([`examples/hyperframes-video/index.html`](examples/hyperframes-video/index.html)) — Deterministic, seek-safe GSAP master timeline + `data-start`/`data-duration` clips ready for MP4 rendering.
+3. **Interactive Proposals & Decks** ([`index.html`](index.html)) — Reveal.js 5 + cinematic letterbox intro (`I` to replay) + 3D textured cards.
+
+## Core Modules (`src/`)
+- `src/shaders/bayer-dither.js` — GPU $8\times8$ Bayer dithering + FBM noise with `pan`, `lift`, `warm`, `bright`, `ripple`, and `renderAt(t)` for deterministic video frames.
+- `src/three/stage.js` — Beveled metallic 3D cards (`assets/cards/`), orbiting 3D geometry, and `GLTFLoader` for `.glb`/`.gltf` models (`assets/models/`).
+- `src/motion/cinematic-intro.js` — Reusable letterbox curtain + blurred beat cards + split-letter title reveal + flash/shake intro.
+- `src/motion/gsap-sync.js` — Reveal.js ↔ GSAP ↔ Three.js ↔ Shader synchronization.
 
 ## Quick Start (Local)
 ```bash
-python3 -m http.server 3099
+python3 -m http.server 3098
 ```
-Open [http://localhost:3099](http://localhost:3099).
-
-## Folder Structure
-- `index.html` — Slide deck & scene configuration
-- `src/styles/deck.css` — Theme variables (`--bg-deep`, `--gold`, `--card-bg`) & slide layout classes
-- `src/shaders/bayer-dither.js` — WebGL Bayer ordered dithering shader
-- `src/three/stage.js` — Three.js 3D textured cards, orbiting gems, & GLTF model loader
-- `src/motion/gsap-sync.js` — Reveal.js ↔ GSAP ↔ Three.js synchronization
-- `assets/cards/` — Card artwork mapped onto 3D cards
-- `assets/models/` — Optional `.glb` / `.gltf` 3D models
-- `.github/workflows/pages.yml` — Auto-deploy to GitHub Pages on push to `main`
+- Deck: [http://localhost:3098](http://localhost:3098)
+- Website template: [http://localhost:3098/examples/website/](http://localhost:3098/examples/website/)
+- HyperFrames video template: [http://localhost:3098/examples/hyperframes-video/](http://localhost:3098/examples/hyperframes-video/)

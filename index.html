@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,400&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
     rel="stylesheet"
   />
   <link
@@ -16,6 +16,7 @@
     href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css"
   />
   <link rel="stylesheet" href="./src/styles/deck.css" />
+  <link rel="stylesheet" href="./src/styles/cinematic.css" />
   <script type="importmap">
     {
       "imports": {
@@ -31,6 +32,23 @@
 
   <!-- Layer 1: Three.js 3D Textured Cards + Orbiting Gems (+ optional .glb) -->
   <canvas id="webgl-3d"></canvas>
+
+  <!-- Cinematic Letterbox Intro (press I to replay, or Skip) -->
+  <div id="cinematic-intro">
+    <div class="in-curtain"></div>
+    <div class="in-bar top"></div>
+    <div class="in-bar bot"></div>
+    <div class="in-flash"></div>
+    <div class="in-stage">
+      <div class="in-cap">INDIA'S LUXURY REWARDS ENGINE</div>
+      <div class="in-beat">Public data belongs to <em>everyone</em>.</div>
+      <div class="in-beat">Earn the sign-in with <em>real utility</em>.</div>
+      <div class="in-ttl"><span class="w">CARDSPENDS</span></div>
+      <div class="in-rule"></div>
+      <div class="in-sub">PRODUCT &amp; GROWTH ARCHITECTURE</div>
+    </div>
+    <button class="in-skip" id="in-skip" type="button">Skip Intro →</button>
+  </div>
 
   <!-- Persistent Top Chrome -->
   <div class="deck-chrome">
@@ -365,6 +383,7 @@
     import { initBayerDitherBackground } from "./src/shaders/bayer-dither.js";
     import { initThreeStage } from "./src/three/stage.js";
     import { initRevealGsapSync } from "./src/motion/gsap-sync.js";
+    import { buildCinematicIntroTimeline } from "./src/motion/cinematic-intro.js";
 
     const shaderState = initBayerDitherBackground("webgl-bg", {
       deepColor: [0.015, 0.06, 0.06],
@@ -423,7 +442,26 @@
       ],
     });
 
-    initRevealGsapSync({ shaderState, threeStage });
+    const deck = initRevealGsapSync({ shaderState, threeStage });
+
+    let activeIntro = null;
+    function playIntro() {
+      if (activeIntro && activeIntro.isActive()) return;
+      activeIntro = buildCinematicIntroTimeline({ shaderState });
+    }
+
+    document.getElementById("in-skip")?.addEventListener("click", () => {
+      if (activeIntro && activeIntro.progress() < 1) activeIntro.progress(1);
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "i" || e.key === "I") playIntro();
+    });
+
+    // Auto-play cinematic intro on initial load at Slide 1
+    if (!window.location.hash || window.location.hash === "#/0" || window.location.hash === "#/") {
+      playIntro();
+    }
   </script>
 </body>
 </html>

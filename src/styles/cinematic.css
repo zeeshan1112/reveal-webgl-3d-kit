@@ -1,0 +1,135 @@
+/* Cinematic Letterbox Intro Overlay (inspired by tripvan-proposal) */
+#cinematic-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.in-curtain {
+  position: absolute;
+  inset: 0;
+  background: #061313;
+  z-index: 1;
+}
+
+.in-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 12vh;
+  background: #040d0d;
+  z-index: 60;
+}
+
+.in-bar.top {
+  top: 0;
+}
+
+.in-bar.bot {
+  bottom: 0;
+}
+
+.in-flash {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255, 224, 150, 0.85), rgba(212, 175, 55, 0.2));
+  z-index: 58;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.in-stage {
+  position: relative;
+  z-index: 55;
+  text-align: center;
+  max-width: 900px;
+  padding: 0 32px;
+}
+
+.in-cap {
+  font-family: "JetBrains Mono", "Space Mono", monospace;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #f3e5ab;
+  opacity: 0;
+}
+
+.in-beat {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(820px, 90vw);
+  font-size: clamp(28px, 4.4vw, 54px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: #e6f2f0;
+  opacity: 0;
+}
+
+.in-beat em {
+  font-family: "Fraunces", Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: #ffcc78;
+}
+
+.in-ttl {
+  font-size: clamp(48px, 8vw, 108px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: #ffffff;
+  opacity: 0;
+}
+
+.in-ttl .ch {
+  display: inline-block;
+}
+
+.in-rule {
+  width: 240px;
+  height: 2px;
+  margin: 22px auto 16px;
+  background: linear-gradient(90deg, transparent, #ffcc78, transparent);
+  transform-origin: center;
+  transform: scaleX(0);
+}
+
+.in-sub {
+  font-family: "JetBrains Mono", "Space Mono", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #f3e5ab;
+  opacity: 0;
+}
+
+.in-skip {
+  position: fixed;
+  right: 28px;
+  bottom: 24px;
+  z-index: 65;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(8, 31, 31, 0.85);
+  color: #f3e5ab;
+  border: 1px solid rgba(255, 204, 120, 0.45);
+  cursor: pointer;
+}
+
+.in-skip:hover {
+  background: rgba(212, 175, 55, 0.22);
+}

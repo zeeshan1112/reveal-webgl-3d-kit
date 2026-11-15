@@ -1,6 +1,7 @@
 /**
- * Interactive WebGL 8x8 Bayer Dithering Background Shader
- * Based on Codrops Bayer Dithering + WebGL Shaders noise patterns.
+ * Interactive WebGL 8x8 Bayer Dithering Shader
+ * Supports continuous camera uniforms (pan, lift, warm, bright) for websites/decks
+ * AND deterministic renderAt(timeSec) for HyperFrames video rendering.
  */
 export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
   const canvas = document.getElementById(canvasId);
@@ -11,9 +12,9 @@ export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
   if (!gl) return null;
 
   const colors = {
-    deep: options.deepColor || [0.015, 0.06, 0.06],
-    mid: options.midColor || [0.038, 0.135, 0.135],
-    accent: options.accentColor || [0.83, 0.68, 0.22],
+    deep: options.deepColor || [0.031, 0.075, 0.075],   // #081313
+    mid: options.midColor || [0.082, 0.16, 0.16],       // #152929
+    accent: options.accentColor || [1.0, 0.8, 0.47],    // #ffcc78 warm gold
   };
 
   const vertexSrc = `
@@ -28,7 +29,10 @@ export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
     uniform vec2 u_resolution;
     uniform float u_time;
     uniform vec2 u_mouse;
-    uniform float u_mood;
+    uniform float u_pan;
+    uniform float u_lift;
+    uniform float u_warm;
+    uniform float u_bright;
     uniform float u_clickRipple;
     uniform vec3 u_colDeep;
     uniform vec3 u_colMid;
@@ -93,12 +97,14 @@ export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
       vec2 aspectUv = (gl_FragCoord.xy - 0.5 * u_resolution.xy) / min(u_resolution.x, u_resolution.y);
       vec2 mouseUv = (u_mouse - 0.5 * u_resolution.xy) / min(u_resolution.x, u_resolution.y);
 
+      vec2 camUv = aspectUv + vec2(u_pan * 0.25, u_lift);
+
       float t = u_time * 0.14;
-      float n1 = fbm(aspectUv * 2.1 + vec2(t, -t * 0.6) + u_mood * 0.35);
-      float n2 = fbm(aspectUv * 3.8 - vec2(t * 0.8, t * 0.5) + n1 * 0.6);
+      float n1 = fbm(camUv * 2.1 + vec2(t, -t * 0.6));
+      float n2 = fbm(camUv * 3.8 - vec2(t * 0.8, t * 0.5) + n1 * 0.6);
 
       float dist = length(aspectUv - mouseUv);
-      float mouseGlow = exp(-dist * 3.2) * 0.38;
+      float mouseGlow = exp(-dist * 3.2) * 0.36;
       float ripple = sin(dist * 24.0 - u_time * 6.0) * exp(-dist * 4.5) * u_clickRipple * 0.25;
 
       float field = clamp(n2 * 0.85 + mouseGlow + ripple - 0.12, 0.0, 1.0);
@@ -109,11 +115,12 @@ export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
       float dithered = step(threshold, field);
       float softLayer = smoothstep(threshold - 0.15, threshold + 0.15, field * 0.78);
 
-      vec3 base = mix(u_colDeep, u_colMid, softLayer * 0.8);
-      vec3 finalCol = mix(base, u_colMid + u_colAccent * 0.22, dithered * 0.32);
+      vec3 base = mix(u_colDeep, u_colMid, softLayer * 0.85);
+      vec3 warmTint = u_colAccent * (0.14 + u_warm * 0.32);
+      vec3 finalCol = mix(base, u_colMid + warmTint, dithered * (0.28 + u_warm * 0.25));
 
       float vig = 1.0 - dot(uv - 0.5, uv - 0.5) * 0.85;
-      gl_FragColor = vec4(finalCol * vig, 1.0);
+      gl_FragColor = vec4(finalCol * vig * u_bright, 1.0);
     }
   `;
 
@@ -145,13 +152,37 @@ export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
   const uRes = gl.getUniformLocation(program, "u_resolution");
   const uTime = gl.getUniformLocation(program, "u_time");
   const uMouse = gl.getUniformLocation(program, "u_mouse");
-  const uMood = gl.getUniformLocation(program, "u_mood");
+  const uPan = gl.getUniformLocation(program, "u_pan");
+  const uLift = gl.getUniformLocation(program, "u_lift");
+  const uWarm = gl.getUniformLocation(program, "u_warm");
+  const uBright = gl.getUniformLocation(program, "u_bright");
   const uRipple = gl.getUniformLocation(program, "u_clickRipple");
   const uColDeep = gl.getUniformLocation(program, "u_colDeep");
   const uColMid = gl.getUniformLocation(program, "u_colMid");
   const uColAccent = gl.getUniformLocation(program, "u_colAccent");
 
-  const state = { mood: 0, ripple: 0 };
+  const state = {
+    pan: options.pan ?? 0,
+    lift: options.lift ?? 0,
+    warm: options.warm ?? 0.25,
+    bright: options.bright ?? 1.0,
+    ripple: 0,
+    renderAt(tSec) {
+      gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform1f(uTime, tSec);
+      gl.uniform2f(uMouse, mouseX, mouseY);
+      gl.uniform1f(uPan, state.pan);
+      gl.uniform1f(uLift, state.lift);
+      gl.uniform1f(uWarm, state.warm);
+      gl.uniform1f(uBright, state.bright);
+      gl.uniform1f(uRipple, state.ripple);
+      gl.uniform3fv(uColDeep, colors.deep);
+      gl.uniform3fv(uColMid, colors.mid);
+      gl.uniform3fv(uColAccent, colors.accent);
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+    },
+  };
+
   let mouseX = window.innerWidth * 0.65;
   let mouseY = window.innerHeight * 0.5;
 
@@ -170,7 +201,7 @@ export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
   });
 
   window.addEventListener("click", () => {
-    if (window.gsap) {
+    if (window.gsap && options.autoLoop !== false) {
       window.gsap.fromTo(
         state,
         { ripple: 1.0 },
@@ -180,21 +211,15 @@ export function initBayerDitherBackground(canvasId = "webgl-bg", options = {}) {
   });
 
   resize();
-  const start = performance.now();
-  function loop(now) {
-    const t = (now - start) * 0.001;
-    gl.uniform2f(uRes, canvas.width, canvas.height);
-    gl.uniform1f(uTime, t);
-    gl.uniform2f(uMouse, mouseX, mouseY);
-    gl.uniform1f(uMood, state.mood);
-    gl.uniform1f(uRipple, state.ripple);
-    gl.uniform3fv(uColDeep, colors.deep);
-    gl.uniform3fv(uColMid, colors.mid);
-    gl.uniform3fv(uColAccent, colors.accent);
-    gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+  if (options.autoLoop !== false) {
+    const start = performance.now();
+    function loop(now) {
+      state.renderAt((now - start) * 0.001);
+      requestAnimationFrame(loop);
+    }
     requestAnimationFrame(loop);
   }
-  requestAnimationFrame(loop);
 
   return state;
 }

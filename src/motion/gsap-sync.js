@@ -48,9 +48,10 @@ export function initRevealGsapSync({ shaderState, threeStage, counterId = "slide
 
     if (shaderState) {
       window.gsap.to(shaderState, {
-        mood: index * 1.1,
-        duration: 1.2,
-        ease: "power2.out",
+        pan: index * 1.15,
+        warm: index % 2 === 0 ? 0.25 : 0.55,
+        duration: 2.0,
+        ease: "power2.inOut",
       });
     }
 
